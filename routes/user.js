@@ -85,8 +85,13 @@ router.post('/register', (req, res) => {
 
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
     res.send('this is dashboard');
-
 });
+
+router.post('/dashboard', ensureAuthenticated, (req, res) => {
+    const {CreationDate, Data, Status, Label} = req.body;
+    
+});
+
 
 //login handle
 router.post('/login', (req, res, next) => {

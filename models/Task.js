@@ -1,13 +1,19 @@
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
+    User:{
+        type: String,
+        required: true
+    },
     CreationDate: {
         type: Date,
         default: Date.now()
     },
+    Title:{
+        type: String
+    },
     Data: {
-        type: String,
-        required: true
+        type: String
     },
     Status: {
         type: String,
