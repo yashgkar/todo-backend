@@ -1,56 +1,68 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const mongoose = require('mongoose');
-const path = require('path');
 const passport = require('passport');
-const { ensureAuthenticated } = require('../config/auth');
-require('../config/passport')(passport);
+const {
+    ensureAuthenticated
+} = require('../config/auth');
+
+//user model
 const User = require('../models/UserData');
 
-router.get('/register', (req, res) => {
 
-    User.find()
-        .then(users => res.json(users))
-        .catch(err => res.status(400).json('Error: ' + err));
+router.get('/login', (req, res) => {
+    res.render('login');
 });
 
-router.post('/register', (req, res) => {
+router.get('/register', (req, res) => {
+    res.render('register');
+});
 
-    const { name, email, password, confirmPass } = req.body;
+//register handle
+
+router.post('/register', (req, res) => {
+    const { name, email, password, password2 } = req.body;
     let errors = [];
 
-    if (!name || !email || !password || !confirmPass) {
+    if (!name || !email || !password || !password2) {
         errors.push({ msg: 'Please enter all fields' });
     }
-    if (password != confirmPass) {
+
+    if (password != password2) {
         errors.push({ msg: 'Passwords do not match' });
     }
 
-    if (errors.length > 0) {
-        res.send(errors);
+    if (password.length < 6) {
+        errors.push({ msg: 'Password must be at least 6 characters' });
     }
 
-    else {
+    if (errors.length > 0) {
+        // res.render('register', {
+        //     errors,
+        //     name,
+        //     email,
+        //     password,
+        //     password2
+        // });
+        res.send(errors);
+    } else {
         //validation passed
         User.findOne({ email: email })
             .then(user => {
                 if (user) {
                     //user exists
-
-                    res.send('Email is already registered')
                     errors.push({ msg: 'Email is already registered' });
-                    /*res.render('register', {
-                        errors,
-                        name,
-                        email,
-                        password,
-                        confirmPass
-                    });*/
-                    res.redirect('/login');
+                    // res.render('register', {
+                    //     errors,
+                    //     name,
+                    //     email,
+                    //     password,
+                    //     password2
+                    // });
+                    res.send('email already registered');
                 } else {
                     const newUser = new User({
-                        name,
+                        name: name,
                         email,
                         password
                     });
@@ -64,9 +76,9 @@ router.post('/register', (req, res) => {
                             newUser.password = hash;
                             newUser.save()
                                 .then(user => {
-                                    res.send('registered!');
-                                    req.flash('success_msg', 'You are now register and can now log in');
-                                    res.redirect('/login');
+                                    // req.flash('success_msg','You are now register and can now log in');
+                                    // res.redirect('/login');
+                                    res.send('registered!!!');
                                 })
                                 .catch(err => console.log(err));
                         })
@@ -75,39 +87,41 @@ router.post('/register', (req, res) => {
 
             });
     }
-
 });
 
-/*router.get('/login', (req, res) => {
-    res.render('studentlogin');
-});*/
 
 
-router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    res.send('this is dashboard');
-});
-
-router.post('/dashboard', ensureAuthenticated, (req, res) => {
-    const {CreationDate, Data, Status, Label} = req.body;
-    
-});
 
 
 //login handle
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
-        successRedirect: '/dashboard',
+        successRedirect: '/tasks',
         failureRedirect: '/login',
         failureFlash: true
     })(req, res, next);
 });
 
-
 //logout handle
 router.get('/logout', (req, res, next) => {
     req.logout();
     req.flash('success_msg', 'You are logged out');
-    res.redirect('/login');
+    res.redirect('/login')
 });
 
 module.exports = router;
+
+
+
+// {
+// 	"email": "yashgarudkar@gmail.com",
+// 	"password": "yashgkar123"
+// }
+
+
+// {
+// 	"Title": "react project",
+// 	"Data": "Work harder",
+// 	"Status": "active",
+// 	"Label":"Food"
+// }

@@ -1,27 +1,36 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
-const flash = require('connect-flash');
-const methodOverride = require('method-override');
+const bodyParser = require('body-parser');
+
+require('./config/passport')(passport);
 
 const app = express();
 
-
-//db config
+// db config
 const db = require('./config/keys').MongoURI;
 
+//connect to mongo
 mongoose.connect(db, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-})
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+    })
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
+
+//ejs
+// app.use(expressLayouts);
+// app.set('view engine', 'ejs');
+
 //body parser
+
 app.use(express.urlencoded({
     extended: false
 }));
+app.use(express.json());
 
 //express session
 app.use(session({
@@ -34,10 +43,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(methodOverride('_method'));
-
-//parse json data
-app.use(express.json());
 //connect flash
 app.use(flash());
 
@@ -50,6 +55,10 @@ app.use((req, res, next) => {
 });
 
 
+//routes
 app.use('/', require('./routes/user'));
+app.use('/', require('./routes/tasks'));
+
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
