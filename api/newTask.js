@@ -13,6 +13,16 @@ module.exports = {
         newTask.save()
             .then(res.send('saved task'))
             .catch(err => { console.log(err) });
+    },
+    updateTask: (res, taskid, title, data, status, label) => {
+        Task.findOneAndUpdate(taskid, {
+            title: title,
+            data: data,
+            status: status,
+            label: label
+        })
+            .then(res.send('Updated task'))
+            .catch(err => { console.log(err) });
     }
 
 
