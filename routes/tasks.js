@@ -4,7 +4,9 @@ const {
     ensureAuthenticated
 } = require('../config/auth');
 
-const Task = require('../models/Task');
+// const modelTask = require('../models/Task');
+const Task = require('../api/newTask');
+const saveNewTask = Task.saveNewTask;
 
 //tasks handle
 
@@ -14,22 +16,13 @@ router.get('/tasks', ensureAuthenticated, (req, res) => {
 
 
 router.post('/tasks', ensureAuthenticated, (req, res) => {
-    
-    const{
+    const {
         title,
         data,
         label
     } = req.body;
-
-    const newTask = new Task({
-        User: req.user._id,
-        Title: title,
-        Data: data,
-        Label: label
-    });
-    newTask.save()
-        .then(res.send('saved task'))
-        .catch(err => { console.log(err) });
+    const user = req.user._id;
+    saveNewTask(res, user, title, data, label);
 });
 
 
