@@ -1,30 +1,36 @@
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
-    User:{
+    user: {
         type: String,
         required: true
     },
-    CreationDate: {
+    creationDate: {
         type: Date,
         default: Date.now()
     },
-    Title:{
+    title: {
         type: String
     },
-    Data: {
+    description: {
         type: String
     },
-    Status: {
+    status: {
         type: String,
         default: "Active"
     },
-    Label: {
+    label: {
         type: String,
         default: "Others"
     },
-    DateOfCompletion: {
-        type: Date
+    completionStatus: {
+        status: {
+            type: String,
+            default: 'Pending'
+        },
+        date: {
+            type: Date
+        }
     }
 }, {
     timestamps: true,
