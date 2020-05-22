@@ -12,12 +12,6 @@ const saveNewTask = Task.saveNewTask;
 const updateTask = Task.updateTask;
 const deleteTask = Task.deleteTask;
 
-//const Checker = require('../controller/checker');
-
-//check status and labels
-//const statusCheck = () => { };
-
-
 
 //tasks handle
 
@@ -35,21 +29,17 @@ router.post('/tasks', ensureAuthenticated, async (req, res) => {
     //     status,
     //     label
     // } = req.body;
-    var status = req.body;
+    var stat = req.body;
 
-    const statuses = await User.find({ email: req.user.email }, { userstatuses: 1, _id: 0 });
-    //const labels = await User.find({ email: req.user.email }, { userlabels: 1, _id: 0 });
-    
-    if (statuses.includes(status)) {
-        
-        console.log('status exists');
+    const check = await User.findOne({email:req.user.email});
+    //var arr = check.userstatuses;
+    if(check.userstatuses.includes(stat)){
+        console.log('exists')
     }
-    else {console.log(statuses);
+    else{
         console.log('new status');
     }
-
-    //console.log(labels);
-
+    //console.log(arr);
 
     //saveNewTask(res, user, status, title, data, label);
 });
