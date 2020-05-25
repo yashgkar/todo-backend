@@ -12,7 +12,7 @@ const addUser = require('../controller/newUser').addNewUser;
 
 
 router.get('/login', (req, res) => {
-    res.render('login');
+    res.send('login');
 });
 
 router.get('/register', (req, res) => {

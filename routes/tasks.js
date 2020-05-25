@@ -12,13 +12,13 @@ const Task = require('../controller/newTask');
 const saveNewTask = Task.saveNewTask;
 const updateTask = Task.updateTask;
 const deleteTask = Task.deleteTask;
-
+const completedTask = Task.completedTask;
 
 //tasks handle
 
 router.get('/tasks', ensureAuthenticated, async (req, res) => {
     const user = req.user._id;
-    const tasks = await modelTask.find({_id: user});
+    const tasks = await modelTask.find({ user: user });
     const statuses = await Status.find();
     const labels = await Label.find();
 
@@ -26,31 +26,32 @@ router.get('/tasks', ensureAuthenticated, async (req, res) => {
     res.json(data);
 });
 
+router.put('/tasks', ensureAuthenticated, async (req, res) => {
+    const taskId = req.params.id;
+    completedTask(res, taskId);
+});
 
 router.post('/tasks', ensureAuthenticated, async (req, res) => {
     const user = req.user._id;
     const {
         title,
-        data,
+        description,
         status,
         label
     } = req.body;
     var stat = req.body;
-
-
-
-    saveNewTask(res, user, status, title, data, label);
+    saveNewTask(res, user, status, title, description, label);
 });
 
 router.post('/tasks/update', ensureAuthenticated, (req, res) => {
     const taskId = req.params.id;
     const {
         title,
-        data,
+        description,
         label,
         status
     } = req.body;
-    updateTask(res, taskId, title, data, status, label);
+    updateTask(res, taskId, title, description, status, label);
     console.log('Updated!');
 });
 

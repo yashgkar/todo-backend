@@ -3,22 +3,22 @@ const Task = require('../models/Task');
 
 module.exports = {
 
-    saveNewTask: (res, user, status, title, data, label) => {
+    saveNewTask: (res, user, status, title, description, label) => {
         const newTask = new Task({
-            User: user,
-            Title: title,
-            Data: data,
-            Label: label,
-            Status: status
+            user: user,
+            title: title,
+            description: description,
+            label: label,
+            status: status
         });
         newTask.save()
             .then(res.send('saved task'))
             .catch(err => { console.log(err) });
     },
-    updateTask: (res, taskId, title, data, status, label) => {
+    updateTask: (res, taskId, title, description, status, label) => {
         Task.findOneAndUpdate(taskId, {
             title: title,
-            data: data,
+            description: description,
             status: status,
             label: label
         })
@@ -28,6 +28,16 @@ module.exports = {
     deleteTask: (res, taskId) => {
         Task.findByIdAndDelete(taskId)
             .then(res.send('Task deleted!'))
+            .catch(err => { console.log(err) });
+    },
+    completedTask: (res, taskId) => {
+        Task.findOneAndUpdate(taskId, {
+            completionStatus:{
+                status: "Completed",
+                date: Date.now()
+            }
+        })
+            .then(res.send('Task Completed'))
             .catch(err => { console.log(err) });
     }
 }
