@@ -6,6 +6,8 @@ const {
 
 const User = require('../models/UserData');
 const modelTask = require('../models/Task');
+const Label = require('../models/Label');
+const Status = require('../models/Status');
 
 const Task = require('../controller/newTask');
 const saveNewTask = Task.saveNewTask;
@@ -31,17 +33,9 @@ router.post('/tasks', ensureAuthenticated, async (req, res) => {
     // } = req.body;
     var stat = req.body;
 
-    const check = await User.findOne({email:req.user.email});
-    //var arr = check.userstatuses;
-    if(check.userstatuses.includes(stat)){
-        console.log('exists')
-    }
-    else{
-        console.log('new status');
-    }
-    //console.log(arr);
+    
 
-    //saveNewTask(res, user, status, title, data, label);
+    saveNewTask(res, user, status, title, data, label);
 });
 
 router.post('/tasks/update', ensureAuthenticated, (req, res) => {

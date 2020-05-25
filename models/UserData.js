@@ -12,10 +12,7 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    },
-    userstatuses: ["Active", "Pending", "Postponed"]
-    ,
-    userlabels: ["Work", "Personal", "Other"]
+    }
 
 }, {
     timestamps: true,
