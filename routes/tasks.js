@@ -4,7 +4,6 @@ const {
     ensureAuthenticated
 } = require('../config/auth');
 
-const User = require('../models/UserData');
 const modelTask = require('../models/Task');
 const Label = require('../models/Label');
 const Status = require('../models/Status');
@@ -18,22 +17,27 @@ const deleteTask = Task.deleteTask;
 //tasks handle
 
 router.get('/tasks', ensureAuthenticated, async (req, res) => {
-    const tasks = await modelTask.find();
-    res.json(tasks);
+    const user = req.user._id;
+    const tasks = await modelTask.find({_id: user});
+    const statuses = await Status.find();
+    const labels = await Label.find();
+
+    const data = [tasks, statuses, labels];
+    res.json(data);
 });
 
 
 router.post('/tasks', ensureAuthenticated, async (req, res) => {
     const user = req.user._id;
-    // const {
-    //     title,
-    //     data,
-    //     status,
-    //     label
-    // } = req.body;
+    const {
+        title,
+        data,
+        status,
+        label
+    } = req.body;
     var stat = req.body;
 
-    
+
 
     saveNewTask(res, user, status, title, data, label);
 });

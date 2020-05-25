@@ -8,6 +8,7 @@ const {
 
 //user model
 const User = require('../models/UserData');
+const addUser = require('../controller/newUser').addNewUser;
 
 
 router.get('/login', (req, res) => {
@@ -47,45 +48,8 @@ router.post('/register', (req, res) => {
         res.send(errors);
     } else {
         //validation passed
-        User.findOne({ email: email })
-            .then(user => {
-                if (user) {
-                    //user exists
-                    errors.push({ msg: 'Email is already registered' });
-                    // res.render('register', {
-                    //     errors,
-                    //     name,
-                    //     email,
-                    //     password,
-                    //     password2
-                    // });
-                    res.send('email already registered');
-                } else {
-                    const newUser = new User({
-                        name: name,
-                        email,
-                        password
-                    });
-
-                    //hash password
-                    bcrypt.genSalt(10, (err, salt) => {
-                        bcrypt.hash(newUser.password, salt, (err, hash) => {
-                            if (err) throw err;
-
-                            //set password to hash
-                            newUser.password = hash;
-                            newUser.save()
-                                .then(user => {
-                                    // req.flash('success_msg','You are now register and can now log in');
-                                    // res.redirect('/login');
-                                    res.send('registered!!!');
-                                })
-                                .catch(err => console.log(err));
-                        })
-                    });
-                }
-
-            });
+        
+        addUser(name, email, password, res);
     }
 });
 
