@@ -3,30 +3,22 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
-const bodyParser = require('body-parser');
 
+require('dotenv').config();
 require('./config/passport')(passport);
 
 const app = express();
 
-// db config
-const db = require('./config/keys').MongoURI;
-
 //connect to mongo
-mongoose.connect(db, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        useFindAndModify: false
-    })
+mongoose.connect(process.env.MONGO_URI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useFindAndModify: false
+})
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
 
-//ejs
-// app.use(expressLayouts);
-// app.set('view engine', 'ejs');
-
-//body parser
 
 app.use(express.urlencoded({
     extended: false

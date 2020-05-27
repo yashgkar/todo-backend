@@ -26,7 +26,7 @@ router.get('/tasks', ensureAuthenticated, async (req, res) => {
     res.json(data);
 });
 
-router.put('/tasks', ensureAuthenticated, async (req, res) => {
+router.put('/completed', ensureAuthenticated, async (req, res) => {
     const taskId = req.params.id;
     completedTask(res, taskId);
 });
@@ -43,7 +43,7 @@ router.post('/tasks', ensureAuthenticated, async (req, res) => {
     saveNewTask(res, user, status, title, description, label);
 });
 
-router.post('/tasks/update', ensureAuthenticated, (req, res) => {
+router.put('/tasks', ensureAuthenticated, (req, res) => {
     const taskId = req.params.id;
     const {
         title,
@@ -55,7 +55,7 @@ router.post('/tasks/update', ensureAuthenticated, (req, res) => {
     console.log('Updated!');
 });
 
-router.delete('/task/delete', ensureAuthenticated, (req, res) => {
+router.delete('/task', ensureAuthenticated, (req, res) => {
     const taskId = req.params.id;
     deleteTask(res, taskId);
 });
