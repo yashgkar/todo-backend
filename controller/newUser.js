@@ -2,8 +2,7 @@ const User = require('../models/UserData');
 const bcrypt = require('bcryptjs');
 
 module.exports = {
-    addNewUser: (name, email, password, res) => {
-        let errors = [];
+    addNewUser: (name, email, password, errors, res) => {
         User.findOne({ email: email })
             .then(user => {
                 if (user) {

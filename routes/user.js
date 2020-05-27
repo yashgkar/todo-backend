@@ -48,8 +48,8 @@ router.post('/register', (req, res) => {
         res.send(errors);
     } else {
         //validation passed
-        
-        addUser(name, email, password, res);
+
+        addUser(name, email, password, errors, res);
     }
 });
 
