@@ -11,9 +11,17 @@ module.exports = {
             label: label,
             status: status
         });
-        newTask.save()
-            .then(res.send('saved task'))
-            .catch(err => { console.log(err) });
+        newTask.save((err, result) => {
+            if (err) {
+                throw err;
+            }
+            if (result) {
+                res.send('Saved task succesfully')
+                //or
+                //res.json(result)
+                //the json obj returns the saved data in json format
+            }
+        })
     },
     updateTask: (res, taskId, title, description, status, label) => {
         Task.findOneAndUpdate(taskId, {
@@ -23,21 +31,21 @@ module.exports = {
             label: label
         })
             .then(res.send('Updated task'))
-            .catch(err => { console.log(err) });
+            .catch(err => { res.send(err) });
     },
     deleteTask: (res, taskId) => {
         Task.findByIdAndDelete(taskId)
             .then(res.send('Task deleted!'))
-            .catch(err => { console.log(err) });
+            .catch(err => { res.send(err) });
     },
     completedTask: (res, taskId) => {
         Task.findOneAndUpdate(taskId, {
-            completionStatus:{
+            completionStatus: {
                 status: "Completed",
                 date: Date.now()
             }
         })
             .then(res.send('Task Completed'))
-            .catch(err => { console.log(err) });
+            .catch(err => { res.send(err) });
     }
 }

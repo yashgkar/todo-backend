@@ -36,7 +36,7 @@ module.exports = {
                                     // res.redirect('/login');
                                     res.send('registered!!!');
                                 })
-                                .catch(err => console.log(err));
+                                .catch(err => res.send(err));
                         })
                     });
                 }

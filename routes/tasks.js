@@ -52,7 +52,6 @@ router.put('/tasks', ensureAuthenticated, (req, res) => {
         status
     } = req.body;
     updateTask(res, taskId, title, description, status, label);
-    console.log('Updated!');
 });
 
 router.delete('/task', ensureAuthenticated, (req, res) => {
