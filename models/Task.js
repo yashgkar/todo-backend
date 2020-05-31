@@ -27,6 +27,9 @@ const TaskSchema = new mongoose.Schema(
     completionDate: {
       type: Date
     },
+    estimatedCompletionDate:{
+      type: Date
+    }
   },
   {
     timestamps: true,

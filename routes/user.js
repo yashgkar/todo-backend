@@ -16,7 +16,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-    res.render('register');
+    res.send('Send json to post method');
 });
 
 //register handle
@@ -54,9 +54,6 @@ router.post('/register', (req, res) => {
 });
 
 
-
-
-
 //login handle
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
@@ -84,8 +81,8 @@ module.exports = router;
 
 
 // {
-// 	"Title": "react project",
-// 	"Data": "Work harder",
-// 	"Status": "active",
-// 	"Label":"Food"
+// 	"title": "react project",
+// 	"description": "Work harder",
+// 	"status": "active",
+// 	"label":"Food"
 // }

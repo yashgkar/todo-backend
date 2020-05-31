@@ -1,13 +1,14 @@
 const Task = require("../models/Task");
 
 module.exports = {
-  saveNewTask: (res, user, status, title, description, label) => {
+  saveNewTask: (res, user, status, title, description, label, estDate) => {
     const newTask = new Task({
       user: user,
       title: title,
       description: description,
       label: label,
       status: status,
+      estimatedCompletionDate: estDate
     });
     newTask.save((err, result) => {
       if (err) {
@@ -21,12 +22,13 @@ module.exports = {
       }
     });
   },
-  updateTask: (res, taskId, title, description, status, label) => {
+  updateTask: (res, taskId, title, description, status, label, estDate) => {
     Task.findOneAndUpdate(taskId, {
       title: title,
       description: description,
       status: status,
       label: label,
+      estimatedCompletionDate: estDate
     })
       .then(res.send("Updated task"))
       .catch((err) => {
