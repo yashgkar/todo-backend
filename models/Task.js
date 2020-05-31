@@ -1,41 +1,37 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const TaskSchema = new mongoose.Schema({
+const TaskSchema = new mongoose.Schema(
+  {
     user: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     creationDate: {
-        type: Date,
-        default: Date.now()
+      type: Date,
+      default: Date.now(),
     },
     title: {
-        type: String
+      type: String,
     },
     description: {
-        type: String
+      type: String,
     },
     status: {
-        type: String,
-        default: "Active"
+      type: String,
+      default: "Active",
     },
     label: {
-        type: String,
-        default: "Others"
+      type: String,
+      default: "Others",
     },
-    completionStatus: {
-        status: {
-            type: String,
-            default: 'Pending'
-        },
-        date: {
-            type: Date
-        }
-    }
-}, {
+    completionDate: {
+      type: Date
+    },
+  },
+  {
     timestamps: true,
-}
+  }
 );
 
-const Task = mongoose.model('Task', TaskSchema);
+const Task = mongoose.model("Task", TaskSchema);
 module.exports = Task;
