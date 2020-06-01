@@ -2,57 +2,54 @@ const express = require("express");
 const router = express.Router();
 const { ensureAuthenticated } = require("../config/auth");
 
-const modelTask = require("../models/Task");
 const Label = require("../models/Label");
 const Status = require("../models/Status");
 
-const Task = require("../controller/newTask");
+const Task = require("../controller/TaskController");
 const saveNewTask = Task.saveNewTask;
 const updateTask = Task.updateTask;
 const deleteTask = Task.deleteTask;
 const completedTask = Task.completedTask;
+const getAllTasks = Task.getAllTasks;
 
 //tasks handle
-
-router.get("/tasks", ensureAuthenticated, async (req, res) => {
+router.get( '/tasks', ensureAuthenticated, async ( req, res ) => {
   const user = req.user._id;
-  const tasks = await modelTask.find({ user: user });
-  res.json(tasks);
+  getAllTasks( res, user );
 });
 
-router.put("/completed/:id", ensureAuthenticated, async (req, res) => {
-  const taskId = req.params.id;
-  completedTask(res, taskId);
+router.put( '/completed-task/:id', ensureAuthenticated, async ( req, res ) => {
+  const taskId = await req.params.id;
+  completedTask( res, taskId );
 });
 
-router.post("/tasks", ensureAuthenticated, async (req, res) => {
+router.post( '/task', ensureAuthenticated, async ( req, res ) => {
   const user = req.user._id;
   const { title, description, status, label, estDate } = req.body;
   var stat = req.body;
-  saveNewTask(res, user, status, title, description, label, estDate);
+  saveNewTask( res, user, status, title, description, label, estDate );
 });
 
-router.put("/tasks/:id", ensureAuthenticated, (req, res) => {
+router.put( '/task/:id', ensureAuthenticated, async ( req, res ) => {
   const taskId = req.params.id;
   const { title, description, label, status, estDate } = req.body;
-  updateTask(res, taskId, title, description, status, label, estDate);
+  updateTask( res, taskId, title, description, status, label, estDate );
 });
 
-router.delete("/tasks/:id", ensureAuthenticated, (req, res) => {
+router.delete( '/task/:id', ensureAuthenticated, async ( req, res ) => {
   const taskId = req.params.id;
-  deleteTask(res, taskId);
+  deleteTask( res, taskId );
 });
 
 //@desc routes for labels and statuses
-
-router.get("/labels", ensureAuthenticated, async (req, res) => {
+router.get( '/labels', ensureAuthenticated, async ( req, res ) => {
   const labels = await Label.find();
-  res.send(labels);
+  res.status( 200 ).json( { 'success': true, 'response': labels[0]['labels'] } )
 });
 
-router.get("/statuses", ensureAuthenticated, async (req, res) => {
+router.get( '/statuses', ensureAuthenticated, async ( req, res ) => {
   const statuses = await Status.find();
-  res.send(statuses);
+  res.status( 200 ).json( { 'success': true, 'response': statuses[0]['statuses'] } )
 });
 
 module.exports = router;

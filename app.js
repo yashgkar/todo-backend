@@ -18,8 +18,6 @@ mongoose.connect(process.env.MONGO_URI, {
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
-
-
 app.use(express.urlencoded({
     extended: false
 }));
@@ -40,13 +38,12 @@ app.use(passport.session());
 app.use(flash());
 
 //global vars
-app.use((req, res, next) => {
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
+app.use((objRequest, objResponse, next) => {
+    objResponse.locals.success_msg = objRequest.flash('success_msg');
+    objResponse.locals.error_msg = objRequest.flash('error_msg');
+    objResponse.locals.error = objRequest.flash('error');
     next();
 });
-
 
 //routes
 app.use('/', require('./routes/user'));

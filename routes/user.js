@@ -8,81 +8,41 @@ const {
 
 //user model
 const User = require('../models/UserData');
-const addUser = require('../controller/newUser').addNewUser;
-
-
-router.get('/login', (req, res) => {
-    res.send('login');
-});
-
-router.get('/register', (req, res) => {
-    res.send('Send json to post method');
-});
+const addUser = require('../controller/UserController').addNewUser;
 
 //register handle
 
-router.post('/register', (req, res) => {
+router.post('/register', ( req, res) => {
     const { name, email, password, password2 } = req.body;
     let errors = [];
 
-    if (!name || !email || !password || !password2) {
-        errors.push({ msg: 'Please enter all fields' });
-    }
-
-    if (password != password2) {
-        errors.push({ msg: 'Passwords do not match' });
-    }
-
-    if (password.length < 6) {
-        errors.push({ msg: 'Password must be at least 6 characters' });
-    }
-
-    if (errors.length > 0) {
-        // res.render('register', {
-        //     errors,
-        //     name,
-        //     email,
-        //     password,
-        //     password2
-        // });
-        res.send(errors);
+    if( !name || !email || !password || !password2 ) {
+        res.send( { 'success': false, 'response': 'Invalid request object' } );
     } else {
         //validation passed
-
-        addUser(name, email, password, errors, res);
+        addUser( name, email, password, errors, res );
     }
 });
 
-
 //login handle
-router.post('/login', (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/tasks',
-        failureRedirect: '/login',
-        failureFlash: true
-    })(req, res, next);
-});
+router.post( '/login', ( req, res, next ) => {
+    passport.authenticate( 'local', function(err, user, info){
+        if( !user ) { 
+            res.json( { 'success': false, 'response': info } ) 
+        } else {
+            req.logIn(user, function(err) {
+                if (err) { return next(err); }
+                return res.redirect('/tasks/');
+            });
+        }    
+      })( req, res, next ); 
+} );
 
 //logout handle
-router.get('/logout', (req, res, next) => {
+router.get( '/logout', ( req, res, next ) => {
     req.logout();
-    req.flash('success_msg', 'You are logged out');
-    res.redirect('/login')
+    req.flash( 'success_msg', 'You are logged out' );
+    res.json( {'success': true, 'response': 'Logged out' } );
 });
 
 module.exports = router;
-
-
-
-// {
-// 	"email": "yashgarudkar@gmail.com",
-// 	"password": "yashgkar123"
-// }
-
-
-// {
-// 	"title": "react project",
-// 	"description": "Work harder",
-// 	"status": "active",
-// 	"label":"Food"
-// }
