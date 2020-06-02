@@ -7,8 +7,8 @@ module.exports = {
     res.status( 200 ).json( { 'success': true, 'response': tasks } );
   },
 
-  saveNewTask: ( res, user, status, title, description, label, estDate ) => {
-    const Task = new Task( {
+  saveNewTask: async( res, user, status, title, description, label, estDate ) => {
+    const newTask = new Task( {
       user: user,
       title: title,
       description: description,
@@ -16,7 +16,7 @@ module.exports = {
       status: status,
       estimatedCompletionDate: estDate
     } );
-    Task.save( ( err, result ) => {
+    newTask.save( ( err, result ) => {
       if (err) {
         res.status( 500 ).json( { 'success': false, 'response': err } );
       }
