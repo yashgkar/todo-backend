@@ -12,7 +12,7 @@ module.exports = function( passport ) {
         email: email
       } ).then( user => {
         if ( !user ) {
-          return done( null, false, 'That email is not registered' );
+          return done( null, false, 'Email is not registered' );
         }
         // Match password
         bcrypt.compare( password, user.password, ( err, isMatch ) => {

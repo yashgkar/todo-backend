@@ -13,10 +13,10 @@ const addUser = require('../controller/UserController').addNewUser;
 //register handle
 
 router.post('/register', ( req, res) => {
-    const { name, email, password, password2 } = req.body;
+    const { name, email, password } = req.body;
     let errors = [];
 
-    if( !name || !email || !password || !password2 ) {
+    if( !name || !email || !password ) {
         res.send( { 'success': false, 'response': 'Invalid request object' } );
     } else {
         //validation passed
@@ -28,10 +28,10 @@ router.post('/register', ( req, res) => {
 router.post( '/login', ( req, res, next ) => {
     passport.authenticate( 'local', function(err, user, info){
         if( !user ) { 
-            res.json( { 'success': false, 'response': info } ) 
+            res.json( { 'success': false, 'response': info } )
         } else {
-            req.logIn(user, function(err) {
-                if (err) { return next(err); }
+            req.logIn(user, function( err ) {
+                if ( err ) { return next( err ); }
                 return res.redirect('/tasks/');
             });
         }    
