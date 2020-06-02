@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
+const cors = require('cors');
 
 require('dotenv').config();
 require('./config/passport')(passport);
@@ -22,6 +23,8 @@ app.use(express.urlencoded({
     extended: false
 }));
 app.use(express.json());
+
+app.use( cors( { origin: ['http://localhost:4200'], credentials: true } ) );
 
 //express session
 app.use(session({
