@@ -18,11 +18,15 @@ const TaskSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "Active",
+      default: "New",
     },
     label: {
       type: String,
       default: "Others",
+    },
+    priority: {
+      type: String,
+      default: "Normal",
     },
     completionDate: {
       type: Date
