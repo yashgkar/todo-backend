@@ -25,15 +25,15 @@ router.put( '/completed-task/:id', ensureAuthenticated, async ( req, res ) => {
 
 router.post( '/task', ensureAuthenticated, async ( req, res ) => {
   const user = req.user._id;
-  const { title, description, status, label, estDate } = req.body;
+  const { title, description, status, label, estDate, priority } = req.body;
   var stat = req.body;
-  saveNewTask( res, user, status, title, description, label, estDate );
+  saveNewTask( res, user, status, title, description, label, estDate, priority );
 });
 
 router.put( '/task/:id', ensureAuthenticated, async ( req, res ) => {
   const taskId = req.params.id;
-  const { title, description, label, status, estDate } = req.body;
-  updateTask( res, taskId, title, description, status, label, estDate );
+  const { title, description, label, status, estDate, priority } = req.body;
+  updateTask( res, taskId, title, description, status, label, estDate, priority );
 });
 
 router.delete( '/task/:id', ensureAuthenticated, async ( req, res ) => {
