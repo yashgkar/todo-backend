@@ -9,7 +9,7 @@ const {
 //user model
 const User = require('../models/UserData');
 const addUser = require('../controller/UserController').addNewUser;
-
+const getName = require('../controller/UserController').getUserName;
 //register handle
 
 router.post('/register', ( req, res) => {
@@ -26,16 +26,16 @@ router.post('/register', ( req, res) => {
 
 //login handle
 router.post( '/login', ( req, res, next ) => {
-    passport.authenticate( 'local', function(err, user, info){
+    passport.authenticate( 'local', function( err, user, info ){
         if( !user ) { 
             res.json( { 'success': false, 'response': info } )
         } else {
-            req.logIn(user, function( err ) {
+            req.logIn( user, function( err ) {
                 if ( err ) { return next( err ); }
                 return res.redirect('/tasks/');
             });
         }    
-      })( req, res, next ); 
+      } )( req, res, next ); 
 } );
 
 //logout handle
@@ -43,6 +43,12 @@ router.get( '/logout', ( req, res, next ) => {
     req.logout();
     req.flash( 'success_msg', 'You are logged out' );
     res.json( {'success': true, 'response': 'Logged out' } );
+});
+
+//get user name
+router.get( '/getUserName', ensureAuthenticated, async ( req, res ) => {
+    const user = req.user._id;
+    getName( res, user );
 });
 
 module.exports = router;

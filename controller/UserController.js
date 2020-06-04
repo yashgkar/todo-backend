@@ -27,5 +27,10 @@ module.exports = {
                 });
             }
         });
+    },
+
+    getUserName: async( res, userId ) => {
+        const user = await User.findById( userId );
+        res.status( 200 ).json( { 'success': true, 'response': user['name'] } );
     }
 }
